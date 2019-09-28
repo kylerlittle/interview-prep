@@ -2,20 +2,39 @@ from typing import List
 import numpy as np
 from statistics import median
 
+def median_of_three(nums: List[int], left: int, right: int) -> int:
+    """Returns index of median of three
+    """
+    mid = int((left - right) / 2)
+    midNum = nums[mid]
+    leftNum = nums[left]
+    rightNum = nums[right]
+
+    if leftNum < midNum <= rightNum:
+        return mid
+    elif midNum < leftNum <= rightNum:
+        return left
+    else:
+        return right
+
 def swap(nums: List[int], i: int, j: int):
+    """Swaps elements i and j in nums
+    """
     temp = nums[i]
     nums[i] = nums[j]
     nums[j] = temp
 
 def __quicksort__(nums: List[int], left: int, right: int) -> List[int]:
+    """Recursively quicksort elements nums[left : right + 1]
+    """
     # 0. base case
     if right <= left:
         return
 
     # 1. pick a pivot -- we'll use median of 3
     # choosing a bad pivot everytime gives us worst case
-    medianOfThree = median([nums[left], nums[right], nums[int((right-left)/2)]])
-    pivot = nums.index(medianOfThree)
+    pivot = median_of_three(nums, left, right)
+    pivotVal = nums[pivot]
 
     # 2. put pivot at rightmost position
     swap(nums, pivot, right)
@@ -32,7 +51,7 @@ def __quicksort__(nums: List[int], left: int, right: int) -> List[int]:
 
     # iterate until where we put the pivot
     while i < right:
-        if nums[i] < medianOfThree:
+        if nums[i] < pivotVal:
             # put element at leftNextAvail
             swap(nums, i, leftNextAvail)
             leftNextAvail += 1
