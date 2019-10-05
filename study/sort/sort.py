@@ -1,5 +1,4 @@
 from typing import List
-import numpy as np
 from statistics import median
 
 def median_of_three(nums: List[int], left: int, right: int) -> int:
@@ -85,6 +84,41 @@ def quicksort(nums: List[int]) -> List[int]:
 
     return nums
 
+
+def merge(l1: List[int], l2: List[int]) -> List[int]:
+    """Merges l1 (sorted) and l2 (sorted) into single sorted list
+    """
+    result = []
+    
+    l1i, l2i = 0, 0
+    while l1i < len(l1) and l2i < len(l2):
+        if l1[l1i] < l2[l2i]:
+            result.append(l1[l1i])
+            l1i += 1
+        else:
+            result.append(l2[l2i])
+            l2i += 1
+
+    if l1i < len(l1):
+        result.extend(l1[l1i:])
+
+    if l2i < len(l2):
+        result.extend(l2[l2i:])
+
+    return result
+
+def __mergesort__(nums: List[int], left: int, right: int) -> List[int]:
+    # base case
+    if left + 1 >= right:
+        return nums[left:right]
+
+    mid = int((left + right) / 2)
+    leftNums = __mergesort__(nums, left, mid)
+    rightNums = __mergesort__(nums, mid, right)
+
+    return merge(leftNums, rightNums)
+
+
 def mergesort(nums: List[int]) -> List[int]:
     """
     Mergesorts a list. The overarching idea is simple: 'it's easy/fast
@@ -94,8 +128,16 @@ def mergesort(nums: List[int]) -> List[int]:
     - worst case runtime is O(n log n)
 
     Cons:
-    -
+    - practically speaking, best case is still kinda slow since we recurse not matter what
+
+    Naive memory usage:
+    - simply return a new sorted array when you recursively sort
+
+    idea:
+    - split nums into left and right halves
+    - mergesort these two halves
+    - they're sorted now, so just merge them back together
     
     """
-    pass
+    return __mergesort__(nums, 0, len(nums))
 
